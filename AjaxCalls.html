@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>AJAX CALLS</title>
+  </head>
+  <body>
+    <ul id="productList"></ul>
+    <hr />
+
+    <div id="productDetailArea">
+      <h3>Ürün Özellikleri</h3>
+      <div id="productDetail"></div>
+      <hr />
+    </div>
+
+    <h3>Yeni Ürün Ekle</h3>
+
+    Ürün Adı: <input type="text" id="name" /> <br /><br />
+    Fiyat: <input type="number" id="price" /><br /><br />
+    Miktar: <input type="number" id="quantity" /><br /><br />
+    <button type="button" id="myBtn">Ekle</button>
+  </body>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function () {
+      $("#productDetailArea").hide();
+      getProductList();
+    });
+
+    function getProductList() {
+      $.ajax({
+        method: "GET",
+        url: "https://localhost:44377/products/getlist",
+      })
+        .done(function (response) {
+          $("#productList").html("");
+
+          $.each(response, function (index, value) {
+            //   console.log(value);
+
+            let liElement = document.createElement("li");
+            liElement.innerHTML = `<b>Ürün Adı:</b> ${value.name} <button onclick="getProductDetail(${value.id})">Detaylar -></button>`;
+
+            $("#productList").append(liElement);
+          });
+        })
+        .fail(function (errorResponse) {})
+        .always(function () {});
+    }
+
+    $("#myBtn").click(function (element) {
+      var type = $(element.target).attr("type");
+
+      $(element.target).attr("disabled", "disabled");
+
+      var name = $("#name").val();
+      var price = $("#price").val();
+      var quantity = $("#quantity").val();
+
+      if (name == "") {
+        alert("Name boş olamaz");
+
+        return;
+      }
+
+      var product = {
+        id: 0,
+        name: name,
+        price: price,
+        quantity: quantity,
+      };
+
+      console.log(product);
+
+      $.ajax({
+        method: "POST",
+        contentType: "application/json",
+        url: "https://localhost:44377/products/insert",
+        data: JSON.stringify(product),
+      })
+        .done(function (response) {
+          $(element.target).removeAttr("disabled");
+          getProductList();
+        })
+        .fail(function (errorResponse) {
+          console.log(errorResponse);
+
+          if (
+            errorResponse.responseText != null &&
+            errorResponse.responseText != ""
+          ) {
+            alert(errorResponse.responseText);
+          }
+        });
+    });
+
+    function getProductDetail(productId) {
+      $.ajax({
+        method: "GET",
+        url: `https://localhost:44377/products/getbyid?id=${productId}`,
+      }).done(function (response) {
+        var product = response;
+        $("#productDetail").html("");
+        $("#productDetail").append(`
+        <b>Ürün Adı:</b> ${product.name} <br>
+        <b>Fiyat:</b> ${product.price} <br>
+        <b>Miktar:</b> ${product.quantity} <br>
+        `);
+
+        $("#productDetailArea").show();
+      });
+    }
+  </script>
+</html>

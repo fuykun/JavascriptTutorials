@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>jQuery</title>
+  </head>
+  <style>
+    .myClass2 {
+      font-size: 60px;
+    }
+  </style>
+  <body>
+    <p id="myText" class="myClass" onmouseover="onMouseOver()">TEXT</p>
+    <input type="button" onclick="myCustomFunction()" value="BUTON" />
+  </body>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // var js = document.getElementById("myText");
+    // console.log(js);
+
+    // var jquery=$("#myText");
+    // console.log(jquery)
+
+    var pTag = $("#myText");
+
+    pTag.before("<b>STRING</b>");
+    pTag.after("<b id='integer'>INTEGER</b>");
+
+    pTag.append("-TEXT");
+
+    function myCustomFunction() {
+      // $("#integer").remove();
+
+      // $("#myText").css("font-size","20px");
+
+      $("#myText").addClass("myClass2");
+
+      $("#myText").removeClass("myClass2");
+    }
+    function onMouseOver() {
+      console.log("mouse gitti");
+    }
+  </script>
+</html>
+
+<!-- <html>
+  <head>
+    <title>Javascript Tutorials</title>
+  </head>
+  <body>
+    <p class="myClass" id="myId" name="myName" data-furkan="İsim">TEXT</p>
+
+    <input type="text" onblur="textChanged(this)" />
+    <button onclick="butonaTiklandi(5)">TIKLA</button>
+  </body>
+
+  <script>
+        function butonaTiklandi(integer) {
+          console.log("BUTONA TIKLANDI" + integer);
+        }
+
+        function textChanged(element) {
+          console.log(element.value);
+          element.value = element.value.toUpperCase();
+        }
+
+        var pTag = document.getElementById("myId");
+        // console.log(pTag.attributes["data-furkan"].value);
+
+    // console.log(pTag.innerText)
+
+    pTag.innerText="STRING";
+  </script>
+</html> -->
